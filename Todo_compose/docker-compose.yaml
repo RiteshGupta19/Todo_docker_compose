@@ -1,0 +1,33 @@
+services:
+  backend:
+    build: ./Todo_compose/backend
+    ports:
+      - "5000:5000" 
+    networks:
+      - todo_network
+    depends_on:
+      - mongodb
+
+  frontend:
+    build: ./Todo_compose/frontend
+    ports:
+      - "5173:5173"  
+    networks:
+      - todo_network
+
+  mongodb:
+    image: mongo:4.4  
+    ports:
+      - "27017:27017"  
+    networks:
+      - todo_network
+    volumes:
+      - mongo-data:/data/db  
+
+networks:
+  todo_network:
+    driver: bridge 
+
+volumes:
+  mongo-data:
+    driver: local   
