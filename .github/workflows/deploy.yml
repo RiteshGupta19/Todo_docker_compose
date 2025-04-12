@@ -37,7 +37,7 @@ jobs:
     - name: SSH into EC2 and pull + restart containers
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          cd /path/to/your/app/directory
+          cd /home/ubuntu/todocompose
           docker compose -f docker-compose.yaml pull
           docker compose -f docker-compose.yaml up -d
         EOF
