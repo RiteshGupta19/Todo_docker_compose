@@ -10,7 +10,7 @@ services:
     depends_on:
       - mongodb
     environment:
-      - MONGO_URL=mongodb://mongodb:27017/todoDB
+      - MONGO_URL=mongodb://mongodb:${MONGO_PORT}/${DB_NAME}
 
   frontend:
     build: ./Todo_compose/frontend
@@ -22,11 +22,14 @@ services:
   mongodb:
     image: mongo:4.4
     ports:
-      - "27017:27017"
+      - "${MONGO_PORT}:${MONGO_PORT}"
     networks:
       - todo_network
     volumes:
       - mongo-data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
 
 networks:
   todo_network:
@@ -35,4 +38,3 @@ networks:
 volumes:
   mongo-data:
     driver: local
-  
