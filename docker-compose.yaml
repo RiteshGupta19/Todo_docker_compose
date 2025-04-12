@@ -19,17 +19,14 @@ services:
     networks:
       - todo_network
 
-  mongodb:
-    image: mongo:4.4
+mongodb:
+    image: mongo:4.4  
     ports:
-      - "${MONGO_PORT}:${MONGO_PORT}"
+      - "27017:27017"  
     networks:
       - todo_network
     volumes:
-      - mongo-data:/data/db
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - mongo-data:/data/db  
 
 networks:
   todo_network:
