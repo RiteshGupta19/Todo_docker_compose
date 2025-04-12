@@ -11,10 +11,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v2
 
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
@@ -27,18 +27,18 @@ jobs:
         docker compose -f docker-compose.yaml build
         docker compose -f docker-compose.yaml push
 
-    - name: Set up SSH for EC2 deployment
+    - name: Set up SSH
       run: |
         mkdir -p ~/.ssh
         echo "${{ secrets.EC2_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -t rsa ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+        ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-    - name: SSH into EC2 and pull + restart containers
+    - name: Deploy on EC2
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
           cd /home/ubuntu/todocompose
           docker compose -f docker-compose.yaml pull
-          docker compose -f docker-compose.yaml up -d
+          docker compose -f docker-compose.yaml up -d --remove-orphans
         EOF
 
