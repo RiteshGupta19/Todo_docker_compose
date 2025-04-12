@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   backend:
+    image: ritesh0419/todo-backend:latest
     build: ./Todo_compose/backend
     ports:
       - "5000:5000"
@@ -13,6 +14,7 @@ services:
       - MONGO_URL=mongodb://mongodb:${MONGO_PORT}/${DB_NAME}
 
   frontend:
+    image: ritesh0419/todo-frontend:latest
     build: ./Todo_compose/frontend
     ports:
       - "5173:5173"
